@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Use environment variable for API URL, fallback to localhost for development
+// API URL - defaults to localhost for local use
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
-  process.env.API_URL ||
   "http://127.0.0.1:8080";
 
 export async function POST(request: NextRequest) {
@@ -96,20 +95,20 @@ export async function POST(request: NextRequest) {
       error.code === "ECONNREFUSED" ||
       error.message?.includes("fetch failed")
     ) {
-      return NextResponse.json(
-        {
-          error:
-            "Failed to connect to backend server. Make sure the Flask server is running on port 8080.",
-        },
-        { status: 503 }
-      );
+        return NextResponse.json(
+          {
+            error:
+              "Failed to connect to backend server. Make sure the backend is running on http://localhost:8080",
+          },
+          { status: 503 }
+        );
     }
 
     return NextResponse.json(
       {
         error:
           error.message ||
-          "Failed to connect to backend server. Make sure the Flask server is running on port 8080.",
+          "Failed to connect to backend server. Make sure the backend is running on http://localhost:8080",
       },
       { status: 500 }
     );
